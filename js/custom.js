@@ -1,5 +1,3 @@
-jQuery(document).ready(function($){
-	
  /*
 	Professional pagination with react without JSX
 	Developer: Alex Jolig
@@ -16,9 +14,9 @@ jQuery(document).ready(function($){
     super(props);
 
     this.state = {
-		posts: [], //However its not relevant in this sample but I named the array posts. feel free to name it as you wish
+		posts: [],
 		currentPage: 1,
-		postsPerPage: 5,
+		postsPerPage: 2,
 		pageCount: 0,
 		pageNumbers2Display: 5, //Set an odd number > 1
     };
@@ -26,26 +24,19 @@ jQuery(document).ready(function($){
 	this.changePage = this.changePage.bind(this);
   }
 
-  //put AJAX request in componentDidMount() method
   componentDidMount() {
-
-    $.ajax({
-      url: "generated.json",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
+	
+	fetch('generated.json').then(function (response) {
+			return response.json();
+	}).then(result => {
         this.setState({
-			posts: data
+			posts: result
 		});
 		this.setState({
 			pageCount: Math.ceil(this.state.posts.length / this.state.postsPerPage)
 		});
-		console.log(this.state.pageCount);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("", status, err.toString());
-      }.bind(this)
-    });	
+	});
+	
   }
 	
 	//Handle click on page number list
@@ -316,8 +307,7 @@ jQuery(document).ready(function($){
 	}
  }
 
-	ReactDOM.render(
-		React.createElement(ImageGallery, null),
-		document.getElementById('root')
-	);
-});
+ReactDOM.render(
+	React.createElement(ImageGallery),
+	document.getElementById('root')
+);
